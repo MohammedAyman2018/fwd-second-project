@@ -48,3 +48,23 @@ These are the notes from a meeting with the frontend developer that describe wha
 - quantity of each product in the order
 - user_id
 - status of order (active or complete)
+
+## API Routes
+
+#### Product
+
+- index GET /products
+- show GET /products/:id
+- create POST /products
+
+#### User
+
+- index GET /users
+- show GET /users/:id
+- create POST /users
+- authenticate POST /users/login/:id
+
+#### Orders
+
+- show GET /orders/:userId
+- create POST /orders
