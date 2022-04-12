@@ -17,7 +17,8 @@ const show = async (_req: Request, res: Response) => {
 };
 const create = async (_req: Request, res: Response) => {
   try {
-    jwt.verify(_req.body.token, TOKEN_SECRET!);
+    const token = _req.get("x-auth-token");
+    jwt.verify(String(token), TOKEN_SECRET!);
   } catch (error) {
     return res.status(401).json(`invalid token ${error}`);
   }

@@ -25,7 +25,8 @@ const authenticate = async (req: Request, res: Response) => {
 
 const index = async (_req: Request, res: Response) => {
   try {
-    jwt.verify(String(_req.query.token), TOKEN_SECRET!);
+    const token = _req.get("x-auth-token");
+    jwt.verify(String(token), TOKEN_SECRET!);
   } catch (error) {
     return res.status(401).json(`invalid token ${error}`);
   }
@@ -34,7 +35,8 @@ const index = async (_req: Request, res: Response) => {
 };
 const show = async (_req: Request, res: Response) => {
   try {
-    jwt.verify(String(_req.query.token), TOKEN_SECRET!);
+    const token = _req.get("x-auth-token");
+    jwt.verify(String(token), TOKEN_SECRET!);
   } catch (error) {
     return res.status(401).json(`invalid token ${error}`);
   }
@@ -42,11 +44,6 @@ const show = async (_req: Request, res: Response) => {
   res.json(users);
 };
 const create = async (_req: Request, res: Response) => {
-  try {
-    jwt.verify(_req.body.token, TOKEN_SECRET!);
-  } catch (error) {
-    return res.status(401).json(`invalid token ${error}`);
-  }
   const users = await store.create(_req.body);
   res.json(users);
 };
