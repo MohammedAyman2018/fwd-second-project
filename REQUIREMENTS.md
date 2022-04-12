@@ -68,3 +68,62 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 - show GET /orders/:userId
 - create POST /orders
+
+## DB setup
+
+1. **Download and install Postgres**
+   https://www.postgresql.org/download/
+
+2. **Create user**
+   CREATE DATABASE frontstore;
+   CREATE DATABASE frontstore_test;
+
+3. **Grant all db privileges to user in both dbs**
+   GRANT ALL PRIVILEGES ON DATABASE frontstore TO postgres;
+   GRANT ALL PRIVILEGES ON DATABASE frontstore_test TO postgres;
+
+4. **Database port**
+   The default port for postgres (5432)
+
+## DB Types
+
+### users table
+
+    id SERIAL PRIMARY KEY
+    firstname VARCHAR(100)
+    lastname VARCHAR(100)
+    password VARCHAR
+
+### products table
+
+    name VARCHAR(100)
+    price INTEGER
+    id SERIAL PRIMARY KEY
+
+### orders table
+
+    id SERIAL PRIMARY KEY
+    user_id INT
+    status_of_order VARCHAR(20)
+
+### order_products table
+
+    id SERIAL PRIMARY KEY
+    order_id INT
+    product_id INT
+    quantity INTEGER
+
+## Server setup
+
+1. **Download and Install nodejs**
+   https://nodejs.org/en/
+
+2. **Install yarn globaly**
+   npm i yarn -g
+
+3. **Install db-migrate globaly**
+   npm i db-migrate -g
+
+4. **Run application**
+   yarn start
+   Server will run on port 3000
