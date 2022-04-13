@@ -22,6 +22,10 @@ const create = async (_req: Request, res: Response) => {
   } catch (error) {
     return res.status(401).json(`invalid token ${error}`);
   }
+  if (!_req.body.name || !_req.body.price) {
+    res.status(400);
+    return res.json("Invalid input.");
+  }
   const products = await store.create(_req.body);
   res.json(products);
 };

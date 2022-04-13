@@ -10,7 +10,7 @@ const { BCRYPT_PASSWORD: pepper, TOKEN_SECRET } = process.env;
 
 // End Point Tests and model tests can't be run at the same time.
 
-describe("Users Model", () => {
+xdescribe("Users Model", () => {
   it("Should have an index method", () => {
     expect(store.index).toBeDefined();
   });
