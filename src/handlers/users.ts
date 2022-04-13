@@ -44,6 +44,10 @@ const show = async (_req: Request, res: Response) => {
   res.json(users);
 };
 const create = async (_req: Request, res: Response) => {
+  if (!_req.body.firstname || !_req.body.lastname) {
+    res.status(400);
+    return res.json("Invalid input.");
+  }
   const users = await store.create(_req.body);
   res.json(users);
 };
