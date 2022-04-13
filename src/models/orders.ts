@@ -34,7 +34,7 @@ export class OrderStore {
         await conn.query(newSql);
       }
       conn.release();
-      return result.rows;
+      return { msg: "Created successfully" };
     } catch (err) {
       throw new Error(`Cannot get orders ${err}`);
     }
