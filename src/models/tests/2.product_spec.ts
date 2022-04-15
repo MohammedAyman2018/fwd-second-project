@@ -3,7 +3,7 @@ import request from "supertest";
 import app from "../../server";
 const store = new ProductStore();
 
-xdescribe("Product Model", () => {
+describe("Product Model", () => {
   it("Should have an index method", () => {
     expect(store.index).toBeDefined();
   });
@@ -37,74 +37,76 @@ xdescribe("Product Model", () => {
   });
 });
 
-describe("POST /products", function () {
-  it("Should return Invalid input if name missing", async () => {
-    try {
-      const tokenReq = await request(app).post("/users/login/1").send({
-        firstname: "user",
-        lastname: "one",
-        password: "123",
-      });
-      const response = await request(app)
-        .post("/products")
-        .set("x-auth-token", tokenReq.body)
-        .send({
-          price: 30,
+describe("Product endpoints", () => {
+  describe("POST /products", function () {
+    it("Should return Invalid input if name missing", async () => {
+      try {
+        const tokenReq = await request(app).post("/users/login/1").send({
+          firstname: "user",
+          lastname: "one",
+          password: "123",
         });
-      expect(response.status).toEqual(400);
-      expect(response.body).toEqual("Invalid input.");
-    } catch (error) {
-      console.log("=================> ", error);
-    }
-  });
-  it("Should return Created successfully", async () => {
-    try {
-      const tokenReq = await request(app).post("/users/login/1").send({
-        firstname: "user",
-        lastname: "one",
-        password: "123",
-      });
-      const response = await request(app)
-        .post("/products")
-        .set("x-auth-token", tokenReq.body)
-        .send({
-          name: "Product 1",
-          price: 30,
+        const response = await request(app)
+          .post("/products")
+          .set("x-auth-token", tokenReq.body)
+          .send({
+            price: 30,
+          });
+        expect(response.status).toEqual(400);
+        expect(response.body).toEqual("Invalid input.");
+      } catch (error) {
+        console.log("=================> ", error);
+      }
+    });
+    it("Should return Created successfully", async () => {
+      try {
+        const tokenReq = await request(app).post("/users/login/1").send({
+          firstname: "user",
+          lastname: "one",
+          password: "123",
         });
-      expect(response.status).toEqual(200);
-      expect(response.body).toEqual({ msg: "Created successfully" });
-    } catch (error) {
-      console.log("=================> ", error);
-    }
+        const response = await request(app)
+          .post("/products")
+          .set("x-auth-token", tokenReq.body)
+          .send({
+            name: "Product 1",
+            price: 30,
+          });
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({ msg: "Created successfully" });
+      } catch (error) {
+        console.log("=================> ", error);
+      }
+    });
   });
-});
 
-describe("GET /products", function () {
-  it("Should return list of products", async () => {
-    try {
-      const response = await request(app).get("/products");
-      expect(response.status).toEqual(200);
-      expect(response.body).toBeInstanceOf(Array);
-      expect(response.body[0].name).toBeInstanceOf(String);
-      expect(response.body[0].price).toBeInstanceOf(Number);
-      expect(response.body[0].id).toBeInstanceOf(Number);
-    } catch (error) {
-      console.log("=================> ", error);
-    }
+  describe("GET /products", function () {
+    it("Should return list of products", async () => {
+      try {
+        const response = await request(app).get("/products");
+        expect(response.status).toEqual(200);
+        expect(response.body).toBeInstanceOf(Array);
+        expect(response.body[0].name).toBeInstanceOf(String);
+        expect(response.body[0].price).toBeInstanceOf(Number);
+        expect(response.body[0].id).toBeInstanceOf(Number);
+      } catch (error) {
+        console.log("=================> ", error);
+      }
+    });
   });
-});
 
-describe("GET /products/:id", function () {
-  it("Should return Single product", async () => {
-    try {
-      const response = await request(app).get("/products/1");
-      expect(response.status).toEqual(200);
-      expect(response.body).toBeInstanceOf(Array);
-      expect(response.body[0].name).toBeInstanceOf(String);
-      expect(response.body[0].price).toBeInstanceOf(Number);
-      expect(response.body[0].id).toBeInstanceOf(Number);
-    } catch (error) {
-      console.log("=================> ", error);
-    }
+  describe("GET /products/:id", function () {
+    it("Should return Single product", async () => {
+      try {
+        const response = await request(app).get("/products/1");
+        expect(response.status).toEqual(200);
+        expect(response.body).toBeInstanceOf(Array);
+        expect(response.body[0].name).toBeInstanceOf(String);
+        expect(response.body[0].price).toBeInstanceOf(Number);
+        expect(response.body[0].id).toBeInstanceOf(Number);
+      } catch (error) {
+        console.log("=================> ", error);
+      }
+    });
   });
 });
