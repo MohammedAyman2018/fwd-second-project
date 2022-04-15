@@ -1,39 +1,42 @@
 import express, { Request, Response } from "express";
-import { Product, ProductStore } from "../models/product";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+import { ProductStore } from "../models/product";
+import auth from "../middleware/auth";
 
-dotenv.config();
-const { TOKEN_SECRET } = process.env;
 const store = new ProductStore();
 
 const index = async (_req: Request, res: Response) => {
-  const products = await store.index();
-  res.json(products);
+  try {
+    const products = await store.index();
+    res.json(products);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
 };
 const show = async (_req: Request, res: Response) => {
-  const products = await store.show(Number(_req.params.id));
-  res.json(products);
+  try {
+    const products = await store.show(Number(_req.params.id));
+    res.json(products);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
 };
 const create = async (_req: Request, res: Response) => {
-  try {
-    const token = _req.get("x-auth-token");
-    jwt.verify(String(token), TOKEN_SECRET!);
-  } catch (error) {
-    return res.status(401).json(`invalid token ${error}`);
-  }
   if (!_req.body.name || !_req.body.price) {
     res.status(400);
     return res.json("Invalid input.");
   }
-  const products = await store.create(_req.body);
-  res.json(products);
+  try {
+    const products = await store.create(_req.body);
+    res.json(products);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
 };
 
 const product_routes = (app: express.Application) => {
   app.get("/products", index);
   app.get("/products/:id", show);
-  app.post("/products", create);
+  app.post("/products", auth, create);
 };
 
 export default product_routes;

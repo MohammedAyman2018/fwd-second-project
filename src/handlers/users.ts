@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { User, UserStore } from "../models/user";
+import auth from "../middleware/auth";
 dotenv.config();
 const { TOKEN_SECRET } = process.env;
 const store = new UserStore();
@@ -25,36 +26,36 @@ const authenticate = async (req: Request, res: Response) => {
 
 const index = async (_req: Request, res: Response) => {
   try {
-    const token = _req.get("x-auth-token");
-    jwt.verify(String(token), TOKEN_SECRET!);
+    const users = await store.index();
+    res.json(users);
   } catch (error) {
-    return res.status(401).json(`invalid token ${error}`);
+    return res.status(500).json(error);
   }
-  const users = await store.index();
-  res.json(users);
 };
 const show = async (_req: Request, res: Response) => {
   try {
-    const token = _req.get("x-auth-token");
-    jwt.verify(String(token), TOKEN_SECRET!);
+    const users = await store.show(Number(_req.params.id));
+    res.json(users);
   } catch (error) {
-    return res.status(401).json(`invalid token ${error}`);
+    return res.status(500).json(error);
   }
-  const users = await store.show(Number(_req.params.id));
-  res.json(users);
 };
 const create = async (_req: Request, res: Response) => {
   if (!_req.body.firstname || !_req.body.lastname) {
     res.status(400);
     return res.json("Invalid input.");
   }
-  const users = await store.create(_req.body);
-  res.json(users);
+  try {
+    const users = await store.create(_req.body);
+    res.json(users);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
 };
 
 const user_routes = (app: express.Application) => {
-  app.get("/users", index);
-  app.get("/users/:id", show);
+  app.get("/users", auth, index);
+  app.get("/users/:id", auth, show);
   app.post("/users", create);
   app.post("/users/login/:id", authenticate);
 };
