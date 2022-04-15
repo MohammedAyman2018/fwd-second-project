@@ -24,7 +24,7 @@ const create = async (req: Request, res: Response) => {
 
 const order_routes = (app: express.Application) => {
   app.post("/orders", auth, create);
-  app.get("/orders/:userId", show);
+  app.get("/orders/:userId", auth, show);
 };
 
 export default order_routes;

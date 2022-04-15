@@ -12,7 +12,13 @@
 					"name": "Get user orders",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpudWxsLCJpYXQiOjE2NDk0Mjg2NDB9.UiRQl3eEalv3AVF3gkifx0XFM_hnU_H2dQh5F-xmsKE",
+								"type": "default"
+							}
+						],
 						"url": {
 							"raw": "http://0.0.0.0:3000/orders/3",
 							"protocol": "http",
